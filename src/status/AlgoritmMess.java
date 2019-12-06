@@ -5,7 +5,8 @@ public abstract class AlgoritmMess extends Algoritm{
     protected final String [] arrayMessage;
     protected final String [] arrayErrorMessage;
 
-    public AlgoritmMess(String [] messOne, String [] messTwo) {
+    public AlgoritmMess( int rollBack, String [] messOne, String [] messTwo) {
+        super(rollBack);
         this.arrayMessage = messOne;
         this.arrayErrorMessage = messTwo;
     }

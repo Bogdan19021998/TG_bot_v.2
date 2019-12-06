@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class TableBuilder
 {
-    // класс для создания меню с кнопками
+    // класс для создания меню с кнопками, таблицами
 
     public static InlineKeyboardMarkup  createTableSpecial()
     {
@@ -96,5 +96,10 @@ public class TableBuilder
 
 
         return new ReplyKeyboardMarkup( arrSpecial );
+    }
+
+    public static ReplyKeyboardMarkup createButton( String name )
+    {
+        return new ReplyKeyboardMarkup( new KeyboardButton[]{ new KeyboardButton( name )} ).resizeKeyboard(true);
     }
 }

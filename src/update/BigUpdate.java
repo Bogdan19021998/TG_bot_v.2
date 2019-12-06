@@ -7,8 +7,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class BigUpdate {
-
+    // класс для получения ID пользователя и отображения типов входящих данных от пользователя (printStatusData () )
     private Update update;
+
     private int userID;
 
     public BigUpdate(Update update) {
@@ -30,6 +31,10 @@ public class BigUpdate {
 
     public int getUserID() {
         return userID;
+    }
+
+    public Update getUpdate() {
+        return update;
     }
 
     public void printStatusData()

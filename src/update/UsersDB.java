@@ -1,15 +1,23 @@
 package update;
 
 import java.util.HashMap;
+import java.util.TreeMap;
 
 public class UsersDB {
+    // БД пользователей
+    // 1) добавляет пользователя
+    // 2) устанавливает дефолтный статус
+    // 3) инкриментирует статус
+    // 4) откатывает статус до необходимого значения
+    // 5) выдает статус пользователя
 
     private static HashMap<Integer, Integer> mapUsers;
 
+
     public static final int BOGDAN_ID = 1062233435;
 
-    {
-        mapUsers = new HashMap<>();
+    static{
+        mapUsers = new HashMap();
         addUser( BOGDAN_ID );
     }
 
@@ -20,15 +28,35 @@ public class UsersDB {
 
     public static int getStatus( int userID)
     {
+        System.out.println("User ID  : " + userID);
         Integer status = mapUsers.get( userID );
-        if( status == null )
-        {
-            addUser( userID );
-                // Добавь проверку добавлен ли пользователт в БД.
 
-            status = 0;
-        }
+        return ( status != null ) ? status : -1;
+    }
 
-        return status;
+    public static boolean incrStatus(  int userID )
+    {
+        int statusBefore = mapUsers.get( userID );
+
+        statusBefore++; // + 1 lvl status
+
+        mapUsers.put( userID, statusBefore );
+
+        int statusAfter = mapUsers.get( userID );
+
+        System.out.println("Update status user in DB : ( " + statusBefore + " ) - > ( " + statusAfter + " ) " );
+        return false;
+    }
+
+    public static boolean rollBackStatus( int userID, int status )
+    {
+        int statusBefore = mapUsers.get( userID );
+
+        mapUsers.put( userID, status );
+
+        int statusAfter = mapUsers.get( userID );
+
+        System.out.println("RollBAck status user in DB : ( " + statusBefore + " ) - > ( " + statusAfter + " ) " );
+        return false;
     }
 }
