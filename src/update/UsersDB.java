@@ -30,7 +30,6 @@ public class UsersDB {
     {
         System.out.println("User ID  : " + userID);
         Integer status = mapUsers.get( userID );
-
         return ( status != null ) ? status : -1;
     }
 
@@ -38,9 +37,9 @@ public class UsersDB {
     {
         int statusBefore = mapUsers.get( userID );
 
-        statusBefore++; // + 1 lvl status
+        int statusUP = statusBefore + 1;
 
-        mapUsers.put( userID, statusBefore );
+        mapUsers.put( userID, statusUP );
 
         int statusAfter = mapUsers.get( userID );
 

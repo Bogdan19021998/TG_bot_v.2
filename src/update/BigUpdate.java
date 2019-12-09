@@ -1,5 +1,7 @@
 package update;
 
+import com.pengrad.telegrambot.model.CallbackQuery;
+import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.Update;
 
 import java.util.HashMap;
@@ -11,26 +13,43 @@ public class BigUpdate {
     private Update update;
 
     private int userID;
+    private long chatID;
+    private int messageID;
 
     public BigUpdate(Update update) {
         this.update = update;
 
-        setUserID();
+        setChatAndUSerID();
     }
 
-    private void setUserID()
+    private void setChatAndUSerID()
     {
-        userID = -1;
         if( update.message() != null ) {
-            userID = update.message().from().id();
+            Message message = update.message();
+            userID = message.from().id();
+            chatID = message.chat().id();
+            messageID = message.messageId();
         }else
         if( update.callbackQuery() != null ) {
-            userID = update.callbackQuery().from().id();
+            CallbackQuery callBack = update.callbackQuery();
+            userID = callBack.from().id();
+            chatID = callBack.message().chat().id();
+            messageID = callBack.message().messageId();
+        }else{
+            new Exception("Unknown data of updata").printStackTrace();
         }
     }
 
     public int getUserID() {
         return userID;
+    }
+
+    public long getChatID() {
+        return chatID;
+    }
+
+    public int getMessageID() {
+        return messageID;
     }
 
     public Update getUpdate() {
