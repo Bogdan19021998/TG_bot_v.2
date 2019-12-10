@@ -9,12 +9,14 @@ public class UserDataProcessing {
     private Bot bot;
     private BigUpdate bigUpdate;
     private StatusManager statusManager;
+    private UsersDB usersDB;
     private int statusID;
 
-    public UserDataProcessing(Bot bot, Update update, StatusManager statusManager) {
+    public UserDataProcessing(Bot bot, BigUpdate bigUpdate) {
         this.bot = bot;
-        this.bigUpdate = new BigUpdate( update );
-        this.statusManager = statusManager;
+        this.bigUpdate = bigUpdate;
+        this.statusManager = bot.getStatusManager();
+        this.usersDB = bot.getUserDB();
 
         statusID = -1;
 
@@ -24,11 +26,11 @@ public class UserDataProcessing {
     public void setStatus()
     {
             // ищем ID в БД.
-        statusID = UsersDB.getStatus( bigUpdate.getUserID() );
+        statusID = usersDB.getStatus( bigUpdate.getUserID() );
 
         if( statusID == -1 )
         {
-            UsersDB.addUser( bigUpdate.getUserID() );
+            usersDB.addUser( bigUpdate.getUserID() );
                 // проверь обновился ли статус
 
             statusID = 0;
@@ -50,7 +52,7 @@ public class UserDataProcessing {
             {
                 case Status.COMPLETE :
                 {
-                    UsersDB.incrStatus( bigUpdate.getUserID() );
+                    usersDB.incrStatus( bigUpdate.getUserID() );
                     break;
                 }
                 case Status.NOT_COMPLETE:
@@ -59,12 +61,12 @@ public class UserDataProcessing {
                 }
                 case Status.NEXT_STATUS:
                 {
-                    UsersDB.incrStatus( bigUpdate.getUserID() );
+                    usersDB.incrStatus( bigUpdate.getUserID() );
                     return Status.NEXT_STATUS;
                 }
                 case Status.ROLL_BACK:
                 {
-                    UsersDB.rollBackStatus( bigUpdate.getUserID(), status.getRollbackStatusID() );
+                    usersDB.rollBackStatus( bigUpdate.getUserID(), status.getRollbackStatusID() );
 
                     return Status.ROLL_BACK;
                 }

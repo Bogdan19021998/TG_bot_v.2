@@ -10,6 +10,7 @@ import status.Status;
 import status.StatusManager;
 import update.BigUpdate;
 import update.UserDataProcessing;
+import update.UsersDB;
 
 import java.util.List;
 
@@ -18,12 +19,14 @@ public class Bot extends TelegramBot {
     private final GetUpdates getUpdates;
     private final StatusManager statusManager;
     private final ButtonManager buttonManager;
+    private final UsersDB userDB;
 
 
     public Bot(String botToken , StatusManager statusManager) {
         super(botToken);
         this.statusManager = statusManager;
         this.buttonManager = new ButtonManager();
+        this.userDB = new UsersDB();
 
 
             // шаблон для получения входящих сообщений
@@ -54,7 +57,7 @@ public class Bot extends TelegramBot {
             // получаем первое сообщение с Telegram.
             Update update = updates.get(0);
 
-            return processUpdate( update );
+            return processUpdate( new BigUpdate( update ));
 
 
         }else{
@@ -67,36 +70,40 @@ public class Bot extends TelegramBot {
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
-    public int processUpdate( Update update )
+    public int processUpdate( BigUpdate bigUpdate )
     {
         // обьект для работы с update
-        UserDataProcessing userDataProcessing = new UserDataProcessing( this, update , statusManager );
+        UserDataProcessing userDataProcessing = new UserDataProcessing( this, bigUpdate  );
         // смотрю/устанавливаю статус в БД
         userDataProcessing.setStatus();
         // нахожу необходимый алгоритм для этого статуса
         int resultStatus = userDataProcessing.workWithStatus();
 
-        if( resultStatus == Status.NEXT_STATUS )
+        if( resultStatus == Status.NEXT_STATUS || resultStatus == Status.ROLL_BACK)
         {
-            processUpdate( update );
+            processUpdate( userDataProcessing.getBigUpdate().cloneWithOutUpdate() );
         }
         // если алгорит сработал успешно, то этот update больше не появится в TG.
-        return  userDataProcessing.getBigUpdate().getUpdate().updateId();
+        return  userDataProcessing.getBigUpdate().getUpdateID();
     }
         // отправляет сообщения
-    public BaseResponse sendMessage(BaseRequest request , BigUpdate bigUpdate)
+    public BaseResponse sendMessage(BaseRequest request )
     {
         BaseResponse responseMessage = execute( request );
-
-//        BaseResponse responseButton = execute( new SendMessage(
-//                    bigUpdate.getChatID(), " ")
-//                    .replyMarkup( buttonManager.getRollBackButtonMarkup() ));
-//        System.out.println("Response button : " + responseButton.isOk() );
         return responseMessage;
+    }
+
+
+    public StatusManager getStatusManager() {
+        return statusManager;
     }
 
     public ButtonManager getButtonManager() {
         return buttonManager;
+    }
+
+    public UsersDB getUserDB() {
+        return userDB;
     }
 }
 

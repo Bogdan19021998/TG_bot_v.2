@@ -35,24 +35,19 @@ public class StatusManager {
         Status statusHello = new StatusMessage(0, mapDialogMessages.get(0) ){
             @Override
             public int work(Bot bot, BigUpdate bigUpdate) {
-                Message messageIn = bigUpdate.getUpdate().message();
-                if( messageIn != null )
-                {
 
-                    // Create out msg with chat_ID and text_msg :  "Привет, я могу помочь тебе найти идеальную ИТ вакансию"
-                    SendMessage message = new SendMessage(
-                            bigUpdate.getChatID(),
-                            getDialogMessages().getOutgoingMessage() );
+                // Create out msg with chat_ID and text_msg :  "Привет, я могу помочь тебе найти идеальную ИТ вакансию"
+                SendMessage message = new SendMessage(
+                        bigUpdate.getChatID(),
+                        getDialogMessages().getOutgoingMessage() );
 
-                    // add button for roll back status.
-                    message.replyMarkup( bot.getButtonManager().getRollBackButtonMarkup() );
+                // add button for roll back status.
+                message.replyMarkup( bot.getButtonManager().getRollBackButtonMarkup() );
 
-                    // send msg
-                    BaseResponse response = bot.sendMessage( message , bigUpdate);
-                    return ( response.isOk() ) ? Status.COMPLETE : Status.NOT_COMPLETE;
+                // send msg
+                BaseResponse response = bot.sendMessage( message );
+                return ( response.isOk() ) ? Status.COMPLETE : Status.NOT_COMPLETE;
 
-                }
-                return Status.UNKNOWN_DATA;
             }
         };
         mapStatus.put(0, statusHello );
@@ -73,6 +68,12 @@ public class StatusManager {
                     if( textIn.contentEquals( getDialogMessages().getIncomingMessage() ) ) {
 
                         return Status.NEXT_STATUS ;
+                    }else{
+                        SendMessage sendMessage = new SendMessage(
+                                bigUpdate.getChatID(),
+                                getDialogMessages().getErrorMessage());
+
+                        bot.sendMessage( sendMessage );
                     }
                 }
                 new Exception( "UNKNOWN_DATA").printStackTrace();
@@ -87,14 +88,14 @@ public class StatusManager {
         Status statusSendMsgName = new StatusMessage(0, mapDialogMessages.get(2) ) {
             @Override
             public int work(Bot bot, BigUpdate bigUpdate) {
-//                if( checkRollBack( bigUpdate) ){ return ROLL_BACK; }
+                if( checkRollBack( bigUpdate) ){ return ROLL_BACK; }
                 // create out message
                 SendMessage message = new SendMessage(
                         bigUpdate.getChatID(),
                         getDialogMessages().getOutgoingMessage() );
 
                 // send out message
-                BaseResponse response = bot.sendMessage( message , bigUpdate);
+                BaseResponse response = bot.sendMessage( message );
 
                 return ( response.isOk() ) ? Status.COMPLETE : Status.NOT_COMPLETE;
                 }
@@ -111,7 +112,7 @@ public class StatusManager {
         Status statusName = new StatusMessage( 0,mapDialogMessages.get(3)) {
             @Override
             public int work(Bot bot, BigUpdate bigUpdate) {
-//                if( checkRollBack( bigUpdate) ){ return ROLL_BACK; }
+                if( checkRollBack( bigUpdate) ){ return ROLL_BACK; }
                 Message messageIn = bigUpdate.getUpdate().message();
 
                 if( messageIn != null )
@@ -133,7 +134,7 @@ public class StatusManager {
                                 bigUpdate.getChatID(),
                                 getDialogMessages().getErrorMessage());
 
-                        BaseResponse response = bot.sendMessage( messageOut , bigUpdate);
+                        BaseResponse response = bot.sendMessage( messageOut );
                             // -> must check response for messageOut
 
                         return Status.NOT_COMPLETE;
@@ -150,7 +151,7 @@ public class StatusManager {
 
             @Override
             public int work(Bot bot, BigUpdate bigUpdate) {
-//                if( checkRollBack( bigUpdate) ){ return ROLL_BACK; }
+                if( checkRollBack( bigUpdate) ){ return ROLL_BACK; }
 
                     // create out message
                 SendMessage message = new SendMessage(
@@ -162,7 +163,7 @@ public class StatusManager {
 
 
                 // send out message
-                BaseResponse response = bot.sendMessage( message , bigUpdate);
+                BaseResponse response = bot.sendMessage( message );
 
                 return ( response.isOk() ) ? Status.COMPLETE : Status.NOT_COMPLETE;
             }
@@ -173,7 +174,7 @@ public class StatusManager {
         Status statusListenerSpecialTable = new Status(2) {
             @Override
             public int work(Bot bot, BigUpdate bigUpdate) {
-//                if( checkRollBack( bigUpdate) ){ return ROLL_BACK; }
+                if( checkRollBack( bigUpdate) ){ return ROLL_BACK; }
 
                 CallbackQuery callback = bigUpdate.getUpdate().callbackQuery();
 
@@ -210,10 +211,10 @@ public class StatusManager {
                             messageOut.replyMarkup( inlineKeyMark );
 
                                 // send new buttons
-                            bot.sendMessage( messageOut , bigUpdate);
+                            bot.sendMessage( messageOut );
                                 // create answer fore remove icon ( loading )
                             AnswerCallbackQuery answer = new AnswerCallbackQuery( callback.id() );
-                            BaseResponse resp = bot.sendMessage(answer, bigUpdate);
+                            BaseResponse resp = bot.sendMessage( answer );
                             System.out.println("Resp remove load : " + resp.isOk() );
                             return Status.NOT_COMPLETE;
 

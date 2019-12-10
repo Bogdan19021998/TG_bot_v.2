@@ -15,11 +15,20 @@ public class BigUpdate {
     private int userID;
     private long chatID;
     private int messageID;
+    private int updateID;
+
 
     public BigUpdate(Update update) {
         this.update = update;
-
+        this.updateID = update.updateId();
         setChatAndUSerID();
+    }
+
+    public BigUpdate(int userID, long chatID, int messageID, int updateID) {
+        this.userID = userID;
+        this.chatID = chatID;
+        this.messageID = messageID;
+        this.updateID = updateID;
     }
 
     private void setChatAndUSerID()
@@ -52,8 +61,17 @@ public class BigUpdate {
         return messageID;
     }
 
+    public int getUpdateID() {
+        return updateID;
+    }
+
     public Update getUpdate() {
         return update;
+    }
+
+    public BigUpdate cloneWithOutUpdate()
+    {
+        return new BigUpdate(this.userID, this.chatID, this.messageID, this.updateID);
     }
 
     public void printStatusData()

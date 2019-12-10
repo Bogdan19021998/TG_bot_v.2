@@ -3,6 +3,7 @@ package com.company;
 
 import status.DialogMessages;
 import status.StatusManager;
+import testEnum.TestEnum;
 
 import java.util.HashMap;
 import java.util.TreeMap;
@@ -15,6 +16,18 @@ public class Main {
         StatusManager statusManager = new StatusManager( createDialogs() );
         Bot bot = new Bot( token , statusManager);
 
+
+        TestEnum.setValues( new String[]{
+                "Text one",
+                "Text two"
+        });
+
+
+        TestEnum enumOne = TestEnum.valueOf( TestEnum.HELLO.name() );
+        TestEnum enumTwo = TestEnum.valueOf( TestEnum.SHECK_BUTTON_HELLO.name());
+
+        System.out.println("Enum one : " + enumOne.getMsg());
+        System.out.println("Enum two : " + enumTwo.getMsg());
 
     }
 
@@ -29,7 +42,7 @@ public class Main {
         mapDialogs.put(1, new DialogMessages(
                 "/start",
                 null,
-                null));
+                "Чтобы начать работать с ботом нажмите кнопку : /start"));
         mapDialogs.put(2, new DialogMessages(
                 null,
                 "Для начала напиши мне свое имя и фамилию",
@@ -42,9 +55,9 @@ public class Main {
                         "состоящий из двух или трех отдельно написанных слов. Попробуй еще раз.\n"));
         mapDialogs.put(4, new DialogMessages(
                 null,
-                "Превосходно, теперь укажи свою специализацию нажав на " +
-                        "соответствующие кнопки. Ты можешь выбрать несколько, но не больше пяти. " +
-                        "По окончанию нажми на кнопку Завершить.\n",
+        "Превосходно, теперь укажи свою специализацию нажав на " +
+                "соответствующие кнопки. Ты можешь выбрать несколько, но не больше пяти. " +
+                "По окончанию нажми на кнопку Завершить.\n",
                 null));
         mapDialogs.put(5, new DialogMessages(
                 null,

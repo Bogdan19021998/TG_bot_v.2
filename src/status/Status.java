@@ -27,12 +27,12 @@ public abstract class Status {
 
     protected boolean checkRollBack(BigUpdate bigUpdate)
     {
-        Message mess = bigUpdate.getUpdate().message();
-        if( mess != null )
-        {
-            if( mess.text().trim().toLowerCase().contentEquals( Status.MSG_ROLL_BACK ) )
-            {
-                return true;
+        if( bigUpdate.getUpdate() != null) {
+            Message mess = bigUpdate.getUpdate().message();
+            if (mess != null) {
+                if (mess.text().trim().toLowerCase().contentEquals(Status.MSG_ROLL_BACK)) {
+                    return true;
+                }
             }
         }
         return false;
