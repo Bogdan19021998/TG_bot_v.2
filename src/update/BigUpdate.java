@@ -43,6 +43,9 @@ public class BigUpdate {
             CallbackQuery callBack = update.callbackQuery();
             userID = callBack.from().id();
             chatID = callBack.message().chat().id();
+
+            callBack.message().from().id();
+
             messageID = callBack.message().messageId();
         }else{
             new Exception("Unknown data of updata").printStackTrace();

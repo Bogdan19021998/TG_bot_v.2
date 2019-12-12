@@ -39,7 +39,7 @@ public class Bot extends TelegramBot {
                 // обрабатываю ОДНО входящее сообщение
             int statusUpdated = processAllUpdates();
 
-            return statusUpdated;
+            return UpdatesListener.CONFIRMED_UPDATES_ALL ;
         });
     }
 
@@ -89,7 +89,9 @@ public class Bot extends TelegramBot {
         // отправляет сообщения
     public BaseResponse sendMessage(BaseRequest request )
     {
+
         BaseResponse responseMessage = execute( request );
+
         return responseMessage;
     }
 

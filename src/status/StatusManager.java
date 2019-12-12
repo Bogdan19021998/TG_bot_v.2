@@ -6,6 +6,7 @@ import com.pengrad.telegrambot.model.Message;
 import com.pengrad.telegrambot.model.request.InlineKeyboardButton;
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.request.AnswerCallbackQuery;
+import com.pengrad.telegrambot.request.AnswerInlineQuery;
 import com.pengrad.telegrambot.request.EditMessageReplyMarkup;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.pengrad.telegrambot.response.BaseResponse;
@@ -187,6 +188,7 @@ public class StatusManager {
                     {
                             // user pressed other button
                         ButtonManager buttonManager = bot.getButtonManager();
+
                         InlineKeyboardMarkup inlineKeyMark = callback.message().replyMarkup();
                         InlineKeyboardButton [][] arrayButtons = inlineKeyMark.inlineKeyboard();
 
@@ -213,6 +215,7 @@ public class StatusManager {
                                 // send new buttons
                             bot.sendMessage( messageOut );
                                 // create answer fore remove icon ( loading )
+//                            AnswerInlineQuery
                             AnswerCallbackQuery answer = new AnswerCallbackQuery( callback.id() );
                             BaseResponse resp = bot.sendMessage( answer );
                             System.out.println("Resp remove load : " + resp.isOk() );

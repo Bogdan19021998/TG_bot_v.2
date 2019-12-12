@@ -3,10 +3,8 @@ package com.company;
 
 import status.DialogMessages;
 import status.StatusManager;
-import testEnum.TestEnum;
 
 import java.util.HashMap;
-import java.util.TreeMap;
 
 public class Main {
 
@@ -16,18 +14,9 @@ public class Main {
         StatusManager statusManager = new StatusManager( createDialogs() );
         Bot bot = new Bot( token , statusManager);
 
+//        IncomingData incomingMessage = new IncomingCallback();
 
-        TestEnum.setValues( new String[]{
-                "Text one",
-                "Text two"
-        });
-
-
-        TestEnum enumOne = TestEnum.valueOf( TestEnum.HELLO.name() );
-        TestEnum enumTwo = TestEnum.valueOf( TestEnum.SHECK_BUTTON_HELLO.name());
-
-        System.out.println("Enum one : " + enumOne.getMsg());
-        System.out.println("Enum two : " + enumTwo.getMsg());
+//        CallbackQuery callBack = incomingMessage.getData( new Update() );
 
     }
 
